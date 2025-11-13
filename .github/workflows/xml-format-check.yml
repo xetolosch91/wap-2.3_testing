@@ -29,6 +29,6 @@ jobs:
               echo "❌ XML syntax error in $file"
               exit 1
             fi
-          done < <(find . -type f -name "*.xml" -print0)
+          done < <(find . -type f \( -name "*.xml" -o -name "*.gst" -o -name "*.cat" -o -name "*.ros" \) -print0)
 
           echo "✅ All XML files are well-formed."
