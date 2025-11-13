@@ -962,7 +962,7 @@
           </profiles>
           <costs>
             <cost name="pts" typeId="points" value="10"/>
-          </costs>
+          
         </selectionEntry>
         <selectionEntry type="upgrade" import="true" name="Rod of Power" hidden="false" id="b80d-1dbf-b133-bef8" collective="false" sortIndex="9">
           <constraints>
