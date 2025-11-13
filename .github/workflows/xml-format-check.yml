@@ -3,8 +3,6 @@ name: XML Formatting Check
 on:
   pull_request:
     branches: ["*"]
-  push:
-    branches: ["*"]
 
 jobs:
   check-xml:
