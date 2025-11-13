@@ -21,14 +21,24 @@ jobs:
         run: |
           set -euo pipefail
           echo "🔍 Checking XML formatting..."
+          
+          # Initialize variable to track errors
+          STATUS=0
+          FAILING_FILES=""
 
           # Find and validate all files ending with .xml (or adjust pattern)
           while IFS= read -r -d '' file; do
             echo "→ Validating $file"
             if ! xmlstarlet fo --well-formed "$file" >/dev/null 2>&1; then
               echo "❌ XML syntax error in $file"
-              exit 1
+              STATUS=1
+              FAILING_FILES="$FAILING_FILES$file\n"
             fi
           done < <(find . -type f \( -name "*.xml" -o -name "*.gst" -o -name "*.cat" -o -name "*.ros" \) -print0)
+
+          if [ "$STATUS" -ne 0 ]; then
+            echo -e "\n⚠️ XML validation failed for the following files:\n$FAILING_FILES"
+            exit 1
+          fi
 
           echo "✅ All XML files are well-formed."
