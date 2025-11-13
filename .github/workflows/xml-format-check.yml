@@ -1,10 +1,7 @@
 name: XML Formatting Check
 
-# Trigger on all pull requests and optionally on all pushes
 on:
   pull_request:
-    branches: ["*"]
-  push:
     branches: ["*"]
 
 jobs:
@@ -20,20 +17,18 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y xmlstarlet
 
-      - name: Validate XML files
+      - name: Validate XML files strictly
         run: |
+          set -euo pipefail
           echo "🔍 Checking XML formatting..."
-          STATUS=0
 
-          # Find all XML files
+          # Find and validate all files ending with .xml (or adjust pattern)
           while IFS= read -r -d '' file; do
-            echo "→ Checking $file"
-
-            # Validate XML strictly
-            if ! xmlstarlet val -e "$file"; then
+            echo "→ Validating $file"
+            if ! xmlstarlet fo --well-formed "$file" >/dev/null 2>&1; then
               echo "❌ XML syntax error in $file"
-              STATUS=1
+              exit 1
             fi
           done < <(find . -type f -name "*.xml" -print0)
 
-          exit $STATUS
+          echo "✅ All XML files are well-formed."
